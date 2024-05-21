@@ -77,7 +77,7 @@ right = cv2.imread(path +"right.png",cv2.IMREAD_GRAYSCALE)
 imgL = cv2.resize(left, (0,0), None, 0.5, 0.5)
 imgR = cv2.resize(right, (0, 0), None, 0.5, 0.5)
 
-stereo = cv2.StereoBM_create(numDisparities=64, blockSize=15)
+stereo = cv2.StereoBM_create(numDisparities=64, blockSize=19)
 disparity = stereo.compute(imgL,imgR)
 
 plt.imshow(disparity,'gray')
