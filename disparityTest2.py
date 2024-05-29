@@ -21,7 +21,7 @@ def mouse_callback(event, x, y, flags, params):
         print(right_clicks[-1])
 
 
-new_data_flag = False
+new_data_flag = True
 
 if new_data_flag:
     ct = datetime.datetime.now()
@@ -77,8 +77,11 @@ right = cv2.imread(path +"right.png",cv2.IMREAD_GRAYSCALE)
 imgL = cv2.resize(left, (0,0), None, 0.5, 0.5)
 imgR = cv2.resize(right, (0, 0), None, 0.5, 0.5)
 
-stereo = cv2.StereoBM_create(numDisparities=64, blockSize=19)
-disparity = stereo.compute(imgL,imgR)
+# stereo = cv2.StereoBM_create(numDisparities=64, blockSize=19)
+stereo = cv2.StereoSGBM_create(numDisparities=128, blockSize=13, P1 = 80, P2 = 1200)
+
+# disparity = stereo.compute(imgL,imgR)
+disparity = stereo.compute(left, right)
 
 plt.imshow(disparity,'gray')
 plt.show()
@@ -90,17 +93,18 @@ cv2.setMouseCallback('Depth', mouse_callback)
 cv2.imshow('Depth', depth)
 cv2.waitKey(0)
 
-click1 = right_clicks[0][1]*depth[right_clicks[0][1],right_clicks[0][0]]
-click2 = right_clicks[1][1]*depth[right_clicks[1][1], right_clicks[1][0]]
+if right_clicks:
+    click1 = (240 - right_clicks[0][1])*depth[right_clicks[0][1], right_clicks[0][0]]
+    click2 = (240 - right_clicks[1][1])*depth[right_clicks[1][1], right_clicks[1][0]]
 
-# print(right_clicks[0])
-# print(right_clicks[1])
+    # print(right_clicks[0])
+    # print(right_clicks[1])
 
-print(depth[int(right_clicks[0][1]), int(right_clicks[0][0])])
-print(depth[int(right_clicks[1][1]), int(right_clicks[1][0])])
+    print(depth[int(right_clicks[0][1]), int(right_clicks[0][0])])
+    print(depth[int(right_clicks[1][1]), int(right_clicks[1][0])])
 
-difference = abs(click1-click2)*(12/1.93)
-print(difference)
+    difference = abs(click1-click2)*(10/1.93)
+    print(difference)
 
-plt.imshow(depth,'inferno')
+plt.imshow(depth,'inferno', norm= "log")
 plt.show()
