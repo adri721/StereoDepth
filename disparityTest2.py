@@ -21,7 +21,7 @@ def mouse_callback(event, x, y, flags, params):
         print(right_clicks[-1])
 
 
-new_data_flag = True
+new_data_flag = False
 
 if new_data_flag:
     ct = datetime.datetime.now()
