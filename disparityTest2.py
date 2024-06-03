@@ -2,6 +2,7 @@ import pyrealsense2 as rs
 import cv2
 import numpy as np
 from matplotlib import pyplot as plt
+import math
 
 import os
 import datetime
@@ -21,7 +22,7 @@ def mouse_callback(event, x, y, flags, params):
         print(right_clicks[-1])
 
 
-new_data_flag = False
+new_data_flag = True
 
 if new_data_flag:
     ct = datetime.datetime.now()
@@ -94,8 +95,13 @@ cv2.imshow('Depth', depth)
 cv2.waitKey(0)
 
 if right_clicks:
+    
+    d1 = depth[right_clicks[0][1], right_clicks[0][0]]*1000
+    d2 = depth[right_clicks[1][1], right_clicks[1][0]]*1000
+    
     click1 = (240 - right_clicks[0][1])*depth[right_clicks[0][1], right_clicks[0][0]]
     click2 = (240 - right_clicks[1][1])*depth[right_clicks[1][1], right_clicks[1][0]]
+
 
     # print(right_clicks[0])
     # print(right_clicks[1])
@@ -103,8 +109,10 @@ if right_clicks:
     print(depth[int(right_clicks[0][1]), int(right_clicks[0][0])])
     print(depth[int(right_clicks[1][1]), int(right_clicks[1][0])])
 
-    difference = abs(click1-click2)*(10/1.93)
-    print(difference)
+    thickness_projection = abs(click1-click2)*(10/1.93)
+    print(thickness_projection)
+    thickness = math.sqrt(math.pow(abs(d2 - d1), 2) + math.pow(thickness_projection, 2))
+    print(thickness)
 
-plt.imshow(depth,'inferno', norm= "log")
+plt.imshow(depth,'inferno', norm='log')
 plt.show()
