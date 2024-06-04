@@ -22,7 +22,13 @@ def mouse_callback(event, x, y, flags, params):
         print(right_clicks[-1])
 
 
-new_data_flag = True
+new_data_flag = False
+print("Do you want to collect new  data (y/n) ?")
+ans = input()
+
+if (ans == 'Y' or ans == 'y'):
+    new_data_flag = True
+
 
 if new_data_flag:
     ct = datetime.datetime.now()
