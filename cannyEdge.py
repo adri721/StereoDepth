@@ -27,19 +27,21 @@ stereo = cv2.StereoSGBM_create(numDisparities=128, blockSize=13, P1 = 80, P2 = 1
 
 # disparity = stereo.compute(imgL,imgR)
 disparity = stereo.compute(left, right)
-valid_pixels = disparity > 0.0
+valid_pixels = disparity > 160.0
 
 baseline = 50
 fx  = 1.93
 units = 0.6
 
-depth = (fx * baseline)/(units * disparity)
+depth = np.zeros(shape=left.shape).astype("float")
+depth[valid_pixels] = (fx * baseline)/(units * disparity[valid_pixels])
+
+depth = np.uint8((depth - depth.min())/(depth.max() - depth.min())*255) 
 
 print(depth.min())
 print(depth.max())
 cv2.imshow('depth',depth)
 cv2.waitKey(0)
-# plt.show()
 
 dst = cv2.Canny(left, 5, 300, None, 3)
 cv2.imshow('edges', dst)
